@@ -1,4 +1,4 @@
-import { Layout, Menu, theme, ConfigProvider } from "antd";
+import { Button, Layout, Menu, theme, ConfigProvider } from "antd";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
@@ -6,6 +6,8 @@ import {
   UserOutlined,
   DesktopOutlined,
   PieChartOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
 } from "@ant-design/icons";
 const { Sider } = Layout;
 
@@ -33,6 +35,7 @@ const items = [
 ];
 
 function MainSider() {
+  const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedKey, setSelectedKey] = useState(
@@ -49,36 +52,51 @@ function MainSider() {
   };
   return (
     <>
-      <Sider
-        width={200}
-        style={{
-          background: colorBgContainer,
+      <ConfigProvider
+        theme={{
+          components: {
+            Menu: {
+              itemSelectedColor: "#FF7F50",
+              itemSelectedBg: "#f7e9e3",
+              iconSize: 22,
+            },
+          },
         }}
       >
-        <ConfigProvider
-          theme={{
-            components: {
-              Menu: {
-                itemSelectedColor: '#FF7F50',
-                itemSelectedBg: "#f7e9e3",
-                iconSize: 22
-              }
-            },
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          width={220}
+          style={{
+            background: colorBgContainer,
+            
+            // height: "540px"
           }}
         >
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              fontSize: '18px',
+              width: 64,
+              height: 64,
+            }}
+          />
           <Menu
             mode="inline"
             selectedKeys={[selectedKey]}
             style={{
-              height: "100%",
+              //height: "100%",
               borderRight: 0,
               fontSize: "17px",
             }}
             items={items}
             onSelect={handleSelect}
           />
-        </ConfigProvider>
-      </Sider>
+        </Sider>
+      </ConfigProvider>
     </>
   );
 }
