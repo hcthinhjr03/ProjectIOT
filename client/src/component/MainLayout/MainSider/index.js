@@ -1,10 +1,11 @@
-import { Layout, Menu, theme } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Layout, Menu, theme, ConfigProvider } from "antd";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
-    NotificationOutlined,
-    UserOutlined,
-    DesktopOutlined,
-    PieChartOutlined,
+  NotificationOutlined,
+  UserOutlined,
+  DesktopOutlined,
+  PieChartOutlined,
 } from "@ant-design/icons";
 const { Sider } = Layout;
 
@@ -33,14 +34,19 @@ const items = [
 
 function MainSider() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [selectedKey, setSelectedKey] = useState(
+    location.pathname.substring(1) || ""
+  );
 
   const {
-    token: { colorBgContainer},
+    token: { colorBgContainer },
   } = theme.useToken();
 
   const handleSelect = (item) => {
-    navigate(`/${item.key}`)
-  }
+    navigate(`/${item.key}`);
+    setSelectedKey(item.key);
+  };
   return (
     <>
       <Sider
@@ -49,16 +55,29 @@ function MainSider() {
           background: colorBgContainer,
         }}
       >
-        <Menu
-          mode="inline"
-          defaultSelectedKeys={[""]}
-          style={{
-            height: "100%",
-            borderRight: 0,
+        <ConfigProvider
+          theme={{
+            components: {
+              Menu: {
+                itemSelectedColor: '#FF7F50',
+                itemSelectedBg: "#f7e9e3",
+                iconSize: 22
+              }
+            },
           }}
-          items={items}
-          onSelect={handleSelect}
-        />
+        >
+          <Menu
+            mode="inline"
+            selectedKeys={[selectedKey]}
+            style={{
+              height: "100%",
+              borderRight: 0,
+              fontSize: "17px",
+            }}
+            items={items}
+            onSelect={handleSelect}
+          />
+        </ConfigProvider>
       </Sider>
     </>
   );
