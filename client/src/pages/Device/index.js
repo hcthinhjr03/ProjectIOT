@@ -254,6 +254,7 @@ function Device() {
   ];
   return (
     <>
+      <h1>Device</h1>
       <ConfigProvider
         theme={{
           token: {

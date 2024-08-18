@@ -282,6 +282,7 @@ function ActionHistory() {
   ];
   return (
     <>
+      <h1>Action History</h1>
       <ConfigProvider
         theme={{
           token: {
