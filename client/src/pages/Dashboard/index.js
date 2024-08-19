@@ -1,11 +1,11 @@
 import { ConfigProvider, Layout } from "antd";
-import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
-import { Card, Col, Row, Tabs, Statistic } from "antd";
+import { Tabs } from "antd";
 import { AiFillCloud, AiFillBulb, AiFillSun } from "react-icons/ai";
 import Temperature from "../../component/Charts/Temperature";
 import Humidity from "../../component/Charts/Humidity";
 import Brightness from "../../component/Charts/Brightness";
 import DeviceSwitchs from "../../component/DeviceSwitchs";
+import Parameter from "../../component/Parameter";
 const { Header, Sider, Content } = Layout;
 
 const headerStyle = {
@@ -80,50 +80,7 @@ function Dashboard() {
         <Layout style={layoutStyle}>
           <Header style={headerStyle}>
             <h3 style={{ margin: "0", color: "#FF7F50" }}>Parameter</h3>
-            <Row gutter={16}>
-              <Col span={8}>
-                <Card bordered={false}>
-                  <Statistic
-                    title="Temperature"
-                    value={38}
-                    precision={0}
-                    valueStyle={{
-                      color: "red",
-                    }}
-                    prefix={<ArrowUpOutlined />}
-                    suffix="°C"
-                  />
-                </Card>
-              </Col>
-              <Col span={8}>
-                <Card bordered={false}>
-                  <Statistic
-                    title="Humidity"
-                    value={65}
-                    precision={0}
-                    valueStyle={{
-                      color: "green",
-                    }}
-                    prefix={<ArrowDownOutlined />}
-                    suffix="%"
-                  />
-                </Card>
-              </Col>
-              <Col span={8}>
-                <Card bordered={false}>
-                  <Statistic
-                    title="Brightness"
-                    value={350}
-                    precision={0}
-                    valueStyle={{
-                      color: "green",
-                    }}
-                    prefix={<ArrowDownOutlined />}
-                    suffix="lx"
-                  />
-                </Card>
-              </Col>
-            </Row>
+            <Parameter/>
           </Header>
           <Layout>
             <Content style={contentStyle}>
