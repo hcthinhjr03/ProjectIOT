@@ -5,6 +5,7 @@ import { AiFillCloud, AiFillBulb, AiFillSun } from "react-icons/ai";
 import Temperature from "../../component/Charts/Temperature";
 import Humidity from "../../component/Charts/Humidity";
 import Brightness from "../../component/Charts/Brightness";
+import DeviceSwitchs from "../../component/DeviceSwitchs";
 const { Header, Sider, Content } = Layout;
 
 const headerStyle = {
@@ -127,12 +128,13 @@ function Dashboard() {
           <Layout>
             <Content style={contentStyle}>
               <h3 style={{ margin: "0", color: "#FF7F50" }}>Chart</h3>
-              <div style={{ padding: "0 30px "}}>
-                <Tabs defaultActiveKey="3" items={tabItems} />
+              <div style={{display: "flex", justifyContent: "center"}}>
+                <Tabs defaultActiveKey="3" items={tabItems} tabBarStyle={{marginLeft: "55px"}} />
               </div>
             </Content>
-            <Sider width="25%" style={siderStyle}>
+            <Sider width="35%" style={siderStyle}>
               <h3 style={{ margin: "0", color: "#FF7F50" }}>Switch</h3>
+              <DeviceSwitchs/>
             </Sider>
           </Layout>
         </Layout>
