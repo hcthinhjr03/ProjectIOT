@@ -69,7 +69,7 @@ const items = [
 function DeviceSwitchs() {
   return (
     <>
-      <div style={{ marginTop: "45px", padding: "0 30px" }}>
+      <div style={{ marginTop: "45px", padding: "0 60px" }}>
         <Descriptions
           title="Toggle to turn ON/OFF device"
           bordered

@@ -2,7 +2,7 @@ import { ConfigProvider, Tree } from "antd";
 const { DirectoryTree } = Tree;
 const treeData = [
   {
-    title: "Professional skills",
+    title: "Professional Skills",
     key: "0-0",
     children: [
       {

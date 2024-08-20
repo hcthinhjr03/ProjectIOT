@@ -86,10 +86,10 @@ function Dashboard() {
             <Content style={contentStyle}>
               <h3 style={{ margin: "0", color: "#FF7F50" }}>Chart</h3>
               <div style={{display: "flex", justifyContent: "center"}}>
-                <Tabs defaultActiveKey="3" items={tabItems} tabBarStyle={{marginLeft: "55px"}} />
+                <Tabs defaultActiveKey="3" items={tabItems} tabBarStyle={{marginLeft: "50px"}} />
               </div>
             </Content>
-            <Sider width="35%" style={siderStyle}>
+            <Sider width="40%" style={siderStyle}>
               <h3 style={{ margin: "0", color: "#FF7F50" }}>Switch</h3>
               <DeviceSwitchs/>
             </Sider>
