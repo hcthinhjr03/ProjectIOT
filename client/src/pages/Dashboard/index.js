@@ -1,11 +1,11 @@
 import { ConfigProvider, Layout } from "antd";
-import { Tabs } from "antd";
-import { AiFillCloud, AiFillBulb, AiFillSun } from "react-icons/ai";
-import Temperature from "../../component/Charts/Temperature";
-import Humidity from "../../component/Charts/Humidity";
-import Brightness from "../../component/Charts/Brightness";
+// import { AiFillCloud, AiFillBulb, AiFillSun } from "react-icons/ai";
+// import Temperature from "../../component/Charts/Temperature";
+// import Humidity from "../../component/Charts/Humidity";
+// import Brightness from "../../component/Charts/Brightness";
 import DeviceSwitchs from "../../component/DeviceSwitchs";
 import Parameter from "../../component/Parameter";
+import Chart from "../../component/Charts";
 const { Header, Sider, Content } = Layout;
 
 const headerStyle = {
@@ -36,26 +36,26 @@ const layoutStyle = {
   maxWidth: "calc(100% - 8px)",
 };
 
-const tabItems = [
-  {
-    key: 1,
-    label: "Temperature",
-    children: <Temperature/>,
-    icon: <AiFillSun />,
-  },
-  {
-    key: 2,
-    label: "Humidity",
-    children: <Humidity/>,
-    icon: <AiFillCloud />,
-  },
-  {
-    key: 3,
-    label: "Brightness",
-    children: <Brightness/>,
-    icon: <AiFillBulb />,
-  },
-];
+// const tabItems = [
+//   {
+//     key: 1,
+//     label: "Temperature",
+//     children: <Temperature/>,
+//     icon: <AiFillSun />,
+//   },
+//   {
+//     key: 2,
+//     label: "Humidity",
+//     children: <Humidity/>,
+//     icon: <AiFillCloud />,
+//   },
+//   {
+//     key: 3,
+//     label: "Brightness",
+//     children: <Brightness/>,
+//     icon: <AiFillBulb />,
+//   },
+// ];
 
 function Dashboard() {
   return (
@@ -84,13 +84,17 @@ function Dashboard() {
           </Header>
           <Layout>
             <Content style={contentStyle}>
-              <h3 style={{ margin: "0", color: "#FF7F50" }}>Chart</h3>
-              <div style={{display: "flex", justifyContent: "center"}}>
+              <h3 style={{ margin: "0", color: "#FF7F50", lineHeight: "90px" }}>Chart</h3>
+              {/* <div style={{display: "flex", justifyContent: "center"}}>
                 <Tabs defaultActiveKey="3" items={tabItems} tabBarStyle={{marginLeft: "50px"}} />
+              </div> */}
+              <div style={{paddingLeft: "50px"}}>
+                <Chart/>
               </div>
+              
             </Content>
             <Sider width="40%" style={siderStyle}>
-              <h3 style={{ margin: "0", color: "#FF7F50" }}>Switch</h3>
+              <h3 style={{ margin: "0", color: "#FF7F50", lineHeight: "90px"}}>Switch</h3>
               <DeviceSwitchs/>
             </Sider>
           </Layout>
