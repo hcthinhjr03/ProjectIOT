@@ -4,10 +4,12 @@ import { Card } from "antd";
 import { Col, Row } from "antd";
 import { FaBook } from "react-icons/fa";
 import {  BsWrenchAdjustable, BsTerminalFill } from "react-icons/bs";
+import { AiFillFile } from "react-icons/ai";
 import { Tabs } from "antd";
 import Education from "../../component/Education";
 import Skills from "../../component/Skills";
 import Projects from "../../component/Projects";
+import Details from "../../component/Details";
 const { Meta } = Card;
 
 const items = [
@@ -47,18 +49,24 @@ const items = [
 const tabItems = [
   {
     key: 1,
+    label: "This Project",
+    children: <Details/>,
+    icon: <AiFillFile />,
+  },
+  {
+    key: 2,
     label: "Education",
     children: <Education/>,
     icon: <FaBook />,
   },
   {
-    key: 2,
+    key: 3,
     label: "Skills",
     children: <Skills/>,
     icon: <BsWrenchAdjustable  />,
   },
   {
-    key: 3,
+    key: 4,
     label: "Projects",
     children: <Projects/>,
     icon: <BsTerminalFill  />,
@@ -111,7 +119,7 @@ function Profile() {
             >
               <Meta
                 title="Ha Cuong Thinh"
-                description="Posts and Telecommunications Institute of Technology"
+                description={<><>ID: B21DCCN691</><br/><>Class: D21CNPM04</><br/><>Posts and Telecommunications Institute of Technology</></>}
               />
             </Card>
           </Col>
