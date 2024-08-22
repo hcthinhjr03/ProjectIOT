@@ -106,7 +106,7 @@ const onChange = (pagination, filters, sorter, extra) => {
   console.log("params", pagination, filters, sorter, extra);
 };
 
-function Device() {
+function DataSensor() {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -254,7 +254,7 @@ function Device() {
   ];
   return (
     <>
-      <h1>Device</h1>
+      <h1>Data Sensor</h1>
       <ConfigProvider
         theme={{
           token: {
@@ -275,4 +275,4 @@ function Device() {
   );
 }
 
-export default Device;
+export default DataSensor;

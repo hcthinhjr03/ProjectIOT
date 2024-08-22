@@ -18,9 +18,9 @@ const items = [
     label: "Dashboard",
   },
   {
-    key: "device",
+    key: "data-sensor",
     icon: <DesktopOutlined />,
-    label: "Device",
+    label: "Data Sensor",
   },
   {
     key: "action-history",

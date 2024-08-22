@@ -1,6 +1,6 @@
 import MainLayout from "../component/MainLayout";
 import Dashboard from "../pages/Dashboard";
-import Device from "../pages/Device";
+import DataSensor from "../pages/DataSensor";
 import ActionHistory from "../pages/ActionHistory";
 import Profile from "../pages/Profile";
 import { Navigate } from "react-router-dom";
@@ -15,8 +15,8 @@ export const routes = [
                 element: <Dashboard/>
             },
             {
-                path: "device",
-                element: <Device/>
+                path: "data-sensor",
+                element: <DataSensor/>
             },
             {
                 path: "action-history",
