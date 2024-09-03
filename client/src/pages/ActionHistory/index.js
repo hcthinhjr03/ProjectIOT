@@ -3,6 +3,10 @@ import { SearchOutlined } from "@ant-design/icons";
 import { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 
+const onShowSizeChange = (current, pageSize) => {
+  console.log(current, pageSize);
+};
+
 const data = [
   {
     key: "1",
@@ -293,6 +297,10 @@ function ActionHistory() {
         <Table
           pagination={{
             position: ["topRight", "bottomCenter"],
+            showSizeChanger: true,
+            onShowSizeChange: onShowSizeChange,
+            defaultCurrent: 1,
+            total: 500
           }}
           columns={columns}
           dataSource={data}

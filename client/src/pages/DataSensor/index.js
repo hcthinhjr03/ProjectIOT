@@ -3,6 +3,10 @@ import { SearchOutlined } from "@ant-design/icons";
 import { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 
+const onShowSizeChange = (current, pageSize) => {
+  console.log(current, pageSize);
+};
+
 const data = [
   {
     key: "1",
@@ -89,7 +93,7 @@ const data = [
     id: 11,
     temperature: 37,
     humid: 70,
-    brightness: 300,
+    brightness: 200,
     time: "12/04/2003 12:12:12",
   },
   {
@@ -231,19 +235,22 @@ function DataSensor() {
       title: "Temperature (°C)",
       dataIndex: "temperature",
       render: (text) => <div style={{ color: "red" }}>{text}</div>,
-      sorter: (a, b) => a.id - b.id,
+      sorter: (a, b) => a.temperature - b.temperature,
+      ...getColumnSearchProps("temperature"),
     },
     {
       title: "Humid (%RH)",
       dataIndex: "humid",
-      render: (text) => <div style={{ color: "blue" }}>{text}</div>,
-      sorter: (a, b) => a.id - b.id,
+      //render: (text) => <div style={{ color: "blue" }}>{text}</div>,
+      sorter: (a, b) => a.humid - b.humid,
+      ...getColumnSearchProps("humid"),
     },
     {
       title: "Brightness (lx)",
       dataIndex: "brightness",
-      render: (text) => <div style={{ color: "orange" }}>{text}</div>,
-      sorter: (a, b) => a.id - b.id,
+      //render: (text) => <div style={{ color: "orange" }}>{text}</div>,
+      sorter: (a, b) => a.brightness - b.brightness,
+      ...getColumnSearchProps("brightness"),
     },
     {
       title: "Time",
@@ -263,8 +270,15 @@ function DataSensor() {
         }}
       >
         <Table
+          // pagination={{
+          //   position: ["topRight", "bottomCenter"],
+          // }}
           pagination={{
             position: ["topRight", "bottomCenter"],
+            showSizeChanger: true,
+            onShowSizeChange: onShowSizeChange,
+            defaultCurrent: 1,
+            //total: 500
           }}
           columns={columns}
           dataSource={data}

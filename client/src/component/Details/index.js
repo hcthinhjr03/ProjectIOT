@@ -4,9 +4,9 @@ import "./Details.scss";
 const data = [
   {
     title: "Project Report PDF",
-    avatar: "https://play-lh.googleusercontent.com/50ss7jzjKrQgxdz6sRknYvNd0gmEpdLQizn3FcNc_wL-hcwzfXJMsmA3XN36lvMx1BE",
+    avatar: "https://png.pngtree.com/png-vector/20220606/ourmid/pngtree-pdf-file-icon-png-png-image_4899509.png",
     description: "Click title to view!",
-    href: "https://ant.design"
+    href: "https://github.com/hcthinhjr03/ProjectIOT"
   },
   {
     title: "Project Github",
@@ -18,7 +18,7 @@ const data = [
     title: "Project API docs",
     avatar: "https://yt3.googleusercontent.com/X-rhKMndFm9hT9wIaJns1StBfGbFdLTkAROwm4UZ3n9ucrBky5CFIeeZhSszFXBgQjItzCD0SA=s900-c-k-c0x00ffffff-no-rj",
     description: "Click title to view!",
-    href: "https://ant.design"
+    href: "https://github.com/hcthinhjr03/ProjectIOT"
   },
 ];
 

@@ -68,7 +68,7 @@ function DeviceSwitchs() {
             autoplay={isLightOn}
             dotLottieRefCallback={lightDotLottieRefCallback}
           />
-          {/* <p class="name-switch">Light</p> <AiFillBulb /> */}
+          {/* <div class="name-switch">Light</div>  */}
         </div>
       ),
       children: (
@@ -94,7 +94,7 @@ function DeviceSwitchs() {
             autoplay={isFanOn}
             dotLottieRefCallback={fanDotLottieRefCallback}
           />
-          {/* <p class="name-switch">Fan</p> <FaFan /> */}
+          {/* <p class="name-switch">Fan</p>  */}
         </div>
       ),
       children: (
