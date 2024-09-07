@@ -102,6 +102,7 @@ function DeviceSwitchs() {
           theme={{
             token: {
               colorPrimary: "#FF7F50",
+
             },
           }}
         >
@@ -140,10 +141,25 @@ function DeviceSwitchs() {
   return (
     <>
       <div style={{ padding: "0px 60px", marginBottom: "30px"}}>
-        <Descriptions
-          bordered
-          items={items}
-        />
+        <ConfigProvider
+          theme={{
+            token: {
+              colorSplit: "#f7e9e3"
+            },
+            components: {
+              Descriptions: {
+                labelBg: "#f7e9e3"
+              }
+            }
+          }}
+        >
+
+
+          <Descriptions
+            bordered
+            items={items}
+          />
+        </ConfigProvider>
       </div>
     </>
   );
