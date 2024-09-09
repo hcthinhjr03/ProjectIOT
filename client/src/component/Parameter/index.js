@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 function Parameter(){
   const [temperature, setTemperature] = useState(0);
   const [humidity, setHumidity] = useState(0);
+  const [brightness, setBrightness] = useState(0);
 
   useEffect(() => {
     const client = mqtt.connect('mqtt://192.168.1.6:9001');
@@ -14,6 +15,7 @@ function Parameter(){
       console.log('Connected to MQTT broker');
       client.subscribe('esp8266/dht/temperature');
       client.subscribe('esp8266/dht/humidity');
+      client.subscribe('esp8266/dht/brightness');
     });
 
     client.on('message', (topic, message) => {
@@ -22,6 +24,9 @@ function Parameter(){
       }
       if (topic === 'esp8266/dht/humidity') {
         setHumidity(message.toString());
+      }
+      if (topic === 'esp8266/dht/brightness') {
+        setBrightness(message.toString());
       }
     });
 
@@ -69,7 +74,7 @@ function Parameter(){
                 <Card bordered={false}>
                   <Statistic
                     title="Brightness"
-                    value={350}
+                    value={brightness}
                     precision={0}
                     valueStyle={{
                       color: "green",
