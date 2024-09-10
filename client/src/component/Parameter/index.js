@@ -4,7 +4,7 @@ import mqtt from "mqtt";
 import { useEffect, useState } from "react";
 
 function Parameter(){
-  const [dataSensor, setDataSensor] = useState();
+  const [dataSensor, setDataSensor] = useState({});
 
   useEffect(() => {
     const client = mqtt.connect('mqtt://192.168.1.6:9001');

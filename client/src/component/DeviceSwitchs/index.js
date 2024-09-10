@@ -1,6 +1,4 @@
 import { ConfigProvider, Descriptions } from "antd";
-// import { AiFillBulb } from "react-icons/ai";
-// import { FaFan, FaWind } from "react-icons/fa";
 import { Switch } from "antd";
 import "./DeviceSwitchs.scss";
 import { useState } from "react";
@@ -61,14 +59,13 @@ function DeviceSwitchs() {
     {
       key: "1",
       label: (
-        <div class="label-switch">
+        <div className="label-switch">
           <DotLottieReact
             src="https://lottie.host/d77b5173-19be-41a5-b08e-60ff95cd19d7/PYtJtiAOB9.lottie"
             loop
             autoplay={isLightOn}
             dotLottieRefCallback={lightDotLottieRefCallback}
           />
-          {/* <div class="name-switch">Light</div>  */}
         </div>
       ),
       children: (
@@ -87,14 +84,13 @@ function DeviceSwitchs() {
     {
       key: "2",
       label: (
-        <div class="label-switch">
+        <div className="label-switch">
           <DotLottieReact
             src="https://lottie.host/aed96a1b-f70b-4997-91a6-a2ff7770e796/FPxFPEGB73.json"
             loop
             autoplay={isFanOn}
             dotLottieRefCallback={fanDotLottieRefCallback}
           />
-          {/* <p class="name-switch">Fan</p>  */}
         </div>
       ),
       children: (
@@ -114,14 +110,13 @@ function DeviceSwitchs() {
     {
       key: "3",
       label: (
-        <div class="label-switch">
+        <div className="label-switch">
           <DotLottieReact
             src="https://lottie.host/49a6a3a2-f7b8-40e2-884c-ca6fdacb9bc1/0Ns4PJa7rS.json"
             loop
             autoplay={isACOn}
             dotLottieRefCallback={ACDotLottieRefCallback}
           />
-          {/* <p class="name-switch">Air Conditioner</p> <FaWind /> */}
         </div>
       ),
       children: (
@@ -140,7 +135,7 @@ function DeviceSwitchs() {
   ];
   return (
     <>
-      <div style={{ padding: "0px 60px", marginBottom: "30px"}}>
+      <div style={{ padding: "0px 80px 0px 0px", marginBottom: "20px"}}>
         <ConfigProvider
           theme={{
             token: {
