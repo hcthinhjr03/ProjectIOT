@@ -7,8 +7,6 @@
 
 //light sensor
 #define ldr_pin A0
-//#define VIN 3.3 //dien ap nguon
-#define R 10000 //gia tri dien tro phan ap
 #define ADC_value 0.0048828125
 
  
@@ -24,6 +22,7 @@
 #define MQTT_PUB_TEMP "esp8266/dht/temperature"
 #define MQTT_PUB_HUM  "esp8266/dht/humidity"
 #define MQTT_PUB_BRIGHT  "esp8266/dht/brightness"
+#define MQTT_PUB_DATA_SENSOR  "esp8266/datasensor"
 
 #define DHTPIN 14 
 #define DHTTYPE DHT11 
@@ -108,13 +107,7 @@ void setup() {
 }
 
 int conversion(int raw_val){
-  // doi don vi
-  //float Vout = float(raw_val) * (VIN / float(1023));// doi analog sang dien ap
-  // RLDR = (R * (VIN - Vout))/Vout; // doi dien ap to dien tro
-  //int lux = 500/(RLDR/1000); // doi dien tro sang lumen
-
   int lux = (250.000000/(ADC_value*LDR_value))-50.000000;
-
   return lux;
 }
 
@@ -127,8 +120,6 @@ void loop() {
 
     LDR_value = analogRead(ldr_pin);
     illuminance = conversion(LDR_value);
-
-    Serial.println(illuminance);
     
     if (isnan(temp) || isnan(hum)) {
       Serial.println(F("Failed to read from DHT sensor!"));
@@ -139,21 +130,12 @@ void loop() {
       Serial.println(F("Failed to read from Light sensor!"));
       return;
     }  
-    
-    // Publish an MQTT message on topic esp8266/dht/temperature
-    uint16_t packetIdPub1 = mqttClient.publish(MQTT_PUB_TEMP, 1, true, String(temp).c_str());                            
-    Serial.printf("Publishing on topic %s at QoS 1, packetId: %i", MQTT_PUB_TEMP, packetIdPub1);
-    Serial.printf("Message: %.2f \n", temp);
 
-    // Publish an MQTT message on topic esp8266/dht/humidity
-    uint16_t packetIdPub2 = mqttClient.publish(MQTT_PUB_HUM, 1, true, String(hum).c_str());                            
-    Serial.printf("Publishing on topic %s at QoS 1, packetId %i: ", MQTT_PUB_HUM, packetIdPub2);
-    Serial.printf("Message: %.2f \n", hum);
-
-    // Publish an MQTT message on topic esp8266/dht/brightness
-    uint16_t packetIdPub3 = mqttClient.publish(MQTT_PUB_BRIGHT, 1, true, String(illuminance).c_str());                            
-    Serial.printf("Publishing on topic %s at QoS 1, packetId %i: ", MQTT_PUB_BRIGHT, packetIdPub3);
-    Serial.printf("Message: %d \n", illuminance);
+    // Publish an MQTT message on topic esp8266/datasensor
+    String dataSensor = "{\"temp\":" + String(temp) + ",\"humid\":" + String(hum) + ",\"bright\":" + String(illuminance) + "}";
+    uint16_t packetIdPub4 = mqttClient.publish(MQTT_PUB_DATA_SENSOR, 1, true, String(dataSensor).c_str());                            
+    Serial.printf("Publishing on topic %s at QoS 1, packetId %i: ", MQTT_PUB_DATA_SENSOR, packetIdPub4);
+    Serial.printf("%s\n", dataSensor.c_str());
 
     // Send sensor data to the backend
     String url = "http://192.168.1.6:3006/data-sensor"; 

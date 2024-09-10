@@ -4,29 +4,19 @@ import mqtt from "mqtt";
 import { useEffect, useState } from "react";
 
 function Parameter(){
-  const [temperature, setTemperature] = useState(0);
-  const [humidity, setHumidity] = useState(0);
-  const [brightness, setBrightness] = useState(0);
+  const [dataSensor, setDataSensor] = useState();
 
   useEffect(() => {
     const client = mqtt.connect('mqtt://192.168.1.6:9001');
 
     client.on('connect', () => {
       console.log('Connected to MQTT broker');
-      client.subscribe('esp8266/dht/temperature');
-      client.subscribe('esp8266/dht/humidity');
-      client.subscribe('esp8266/dht/brightness');
+      client.subscribe('esp8266/datasensor');
     });
 
     client.on('message', (topic, message) => {
-      if (topic === 'esp8266/dht/temperature') {
-        setTemperature(message.toString());
-      }
-      if (topic === 'esp8266/dht/humidity') {
-        setHumidity(message.toString());
-      }
-      if (topic === 'esp8266/dht/brightness') {
-        setBrightness(message.toString());
+      if (topic === 'esp8266/datasensor') {
+        setDataSensor(JSON.parse(message.toString()));
       }
     });
 
@@ -46,7 +36,7 @@ function Parameter(){
                 <Card bordered={false}>
                   <Statistic
                     title="Temperature"
-                    value={temperature}
+                    value={dataSensor.temp}
                     precision={2}
                     valueStyle={{
                       color: "red",
@@ -60,7 +50,7 @@ function Parameter(){
                 <Card bordered={false}>
                   <Statistic
                     title="Humidity"
-                    value={humidity}
+                    value={dataSensor.humid}
                     precision={2}
                     valueStyle={{
                       color: "green",
@@ -74,13 +64,13 @@ function Parameter(){
                 <Card bordered={false}>
                   <Statistic
                     title="Brightness"
-                    value={brightness}
+                    value={dataSensor.bright}
                     precision={0}
                     valueStyle={{
                       color: "green",
                     }}
                     prefix={<ArrowDownOutlined />}
-                    suffix="lx"
+                    suffix="lux"
                   />
                 </Card>
               </Col>
