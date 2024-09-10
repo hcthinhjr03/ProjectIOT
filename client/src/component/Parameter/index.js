@@ -36,7 +36,7 @@ function Parameter(){
                 <Card bordered={false}>
                   <Statistic
                     title="Temperature"
-                    value={dataSensor.temp}
+                    value={dataSensor.temperature}
                     precision={2}
                     valueStyle={{
                       color: "red",
@@ -50,8 +50,8 @@ function Parameter(){
                 <Card bordered={false}>
                   <Statistic
                     title="Humidity"
-                    value={dataSensor.humid}
-                    precision={2}
+                    value={dataSensor.humidity}
+                    precision={0}
                     valueStyle={{
                       color: "green",
                     }}
@@ -64,7 +64,7 @@ function Parameter(){
                 <Card bordered={false}>
                   <Statistic
                     title="Brightness"
-                    value={dataSensor.bright}
+                    value={dataSensor.brightness}
                     precision={0}
                     valueStyle={{
                       color: "green",

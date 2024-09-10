@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 
 const dataSensorSchema = new mongoose.Schema({
-    temp: Number,
-    humid: Number,
+    temperature: Number,
+    humidity: Number,
+    brightness: Number,
     time: { type: Date, default: Date.now }
 });
 

@@ -28,12 +28,12 @@
 #define DHTTYPE DHT11 
 DHT dht(DHTPIN, DHTTYPE);
 
-float temp;
-float hum;
+float temperature;
+float humidity;
 
 //light variables
 int LDR_value;
-int illuminance;
+int brightness;
 
 AsyncMqttClient mqttClient;
 Ticker mqttReconnectTimer;
@@ -115,24 +115,24 @@ void loop() {
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
-    hum = dht.readHumidity();
-    temp = dht.readTemperature();
+    humidity = dht.readHumidity();
+    temperature = dht.readTemperature();
 
     LDR_value = analogRead(ldr_pin);
-    illuminance = conversion(LDR_value);
+    brightness = conversion(LDR_value);
     
-    if (isnan(temp) || isnan(hum)) {
+    if (isnan(temperature) || isnan(humidity)) {
       Serial.println(F("Failed to read from DHT sensor!"));
       return;
     }  
 
-    if (isnan(illuminance)) {
+    if (isnan(brightness)) {
       Serial.println(F("Failed to read from Light sensor!"));
       return;
     }  
 
     // Publish an MQTT message on topic esp8266/datasensor
-    String dataSensor = "{\"temp\":" + String(temp) + ",\"humid\":" + String(hum) + ",\"bright\":" + String(illuminance) + "}";
+    String dataSensor = "{\"temperature\":" + String(temperature) + ",\"humidity\":" + String(humidity) + ",\"brightness\":" + String(brightness) + "}";
     uint16_t packetIdPub4 = mqttClient.publish(MQTT_PUB_DATA_SENSOR, 1, true, String(dataSensor).c_str());                            
     Serial.printf("Publishing on topic %s at QoS 1, packetId %i: ", MQTT_PUB_DATA_SENSOR, packetIdPub4);
     Serial.printf("%s\n", dataSensor.c_str());
@@ -144,7 +144,7 @@ void loop() {
     
     http.begin(client, url);
     http.addHeader("Content-Type", "application/json");
-    String payload = "{\"temp\":" + String(temp) + ",\"humid\":" + String(hum) + "}";
+    String payload = "{\"temperature\":" + String(temperature) + ",\"humidity\":" + String(humidity) + ",\"brightness\":" + String(brightness) + "}";
     int httpCode = http.POST(payload);
 
 

@@ -21,11 +21,11 @@ app.get("/", (req, res) => {
 
 
 app.post('/data-sensor', async (req, res) => {
-    const { temp, humid } = req.body;
+    const { temperature, humidity, brightness } = req.body;
 
     // Create a new sensor data document
     try {
-        const newDataSensor = await DataSensors.create({ temp, humid });
+        const newDataSensor = await DataSensors.create({ temperature, humidity, brightness });
         if (!newDataSensor){
             res.status(401).json({ message: "Error created sensor data" });
         }
