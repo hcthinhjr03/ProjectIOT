@@ -1,8 +1,9 @@
 import { ConfigProvider, Descriptions } from "antd";
 import { Switch } from "antd";
 import "./DeviceSwitchs.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import mqtt from "mqtt";
 
 function DeviceSwitchs() {
   const [fanDotLottie, setFanDotLottie] = useState(null);
@@ -12,6 +13,9 @@ function DeviceSwitchs() {
   const [isFanOn, setIsFanOn] = useState(false);
   const [isLightOn, setIsLightOn] = useState(false);
   const [isACOn, setIsACOn] = useState(false);
+
+  const [client, setClient] = useState(null);
+  const [connected, setConnected] = useState(false);
 
   const fanDotLottieRefCallback = (dotLottie) => {
     setFanDotLottie(dotLottie);
@@ -25,7 +29,11 @@ function DeviceSwitchs() {
     setACDotLottie(dotLottie);
   };
   
-  const handleFanSwitch = () => {
+  const handleFanSwitch = (state) => {
+    let fanState = state ? "ON" : "OFF";
+    if (client && connected) {
+      client.publish("esp8266/action/fan", fanState);
+    }
     setIsFanOn(!isFanOn);
     if(isFanOn){
       fanDotLottie.stop();
@@ -35,8 +43,12 @@ function DeviceSwitchs() {
     }
   }
 
-  const handleLightSwitch = () => {
-    setIsLightOn(!isLightOn);
+  const handleLightSwitch = (state) => {
+    let bulbState = state ? "ON" : "OFF";
+    if (client && connected) {
+      client.publish("esp8266/action/bulb", bulbState);
+    }
+    setIsLightOn(state);
     if(isLightOn){
       lightDotLottie.stop();
     }
@@ -45,7 +57,11 @@ function DeviceSwitchs() {
     }
   }
 
-  const handleACSwitch = () => {
+  const handleACSwitch = (state) => {
+    let acState = state ? "ON" : "OFF";
+    if (client && connected) {
+      client.publish("esp8266/action/ac", acState);
+    }
     setIsACOn(!isACOn);
     if(isACOn){
       ACDotLottie.stop();
@@ -76,7 +92,7 @@ function DeviceSwitchs() {
             },
           }}
         >
-          <Switch checked={isLightOn} onChange={handleLightSwitch}/>
+          <Switch checked={isLightOn} onChange={() => handleLightSwitch(!isLightOn)}/>
         </ConfigProvider>
       ),
       span: 3,
@@ -102,7 +118,7 @@ function DeviceSwitchs() {
             },
           }}
         >
-          <Switch checked={isFanOn} onChange={handleFanSwitch}/>
+          <Switch checked={isFanOn} onChange={() => handleFanSwitch(!isFanOn)}/>
         </ConfigProvider>
       ),
       span: 3,
@@ -127,12 +143,39 @@ function DeviceSwitchs() {
             },
           }}
         >
-          <Switch checked={isACOn} onChange={handleACSwitch}/>
+          <Switch checked={isACOn} onChange={() => handleACSwitch(!isACOn)}/>
         </ConfigProvider>
       ),
       span: 3,
     },
   ];
+
+  useEffect(() => {
+    const mqttClient = mqtt.connect('mqtt://192.168.1.6:9001');
+
+    mqttClient.on('connect', () => {
+      console.log('Connected to MQTT broker');
+      setConnected(true);
+    });
+
+    mqttClient.on('error', (err) => {
+      console.error('MQTT connection error: ', err);
+    });
+
+    mqttClient.on('close', () => {
+      console.log('Disconnected from MQTT broker');
+      setConnected(false);
+    });
+
+    setClient(mqttClient);
+
+    return () => {
+      if (mqttClient) {
+        mqttClient.end();
+      }
+    };
+  }, []);
+
   return (
     <>
       <div style={{ padding: "0px 80px 0px 0px", marginBottom: "20px"}}>
