@@ -1,114 +1,10 @@
 import { Button, ConfigProvider, Input, Space, Table } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
+import { getDataSensor } from "../../services/dataServices";
+import { formatDate } from "../../helpers/formatDate";
 
-const onShowSizeChange = (current, pageSize) => {
-  console.log(current, pageSize);
-};
-
-const data = [
-  {
-    key: "1",
-    id: 1,
-    temperature: 37,
-    humid: 70,
-    brightness: 300,
-    time: "26/07/2003 12:12:12",
-  },
-  {
-    key: "2",
-    id: 2,
-    temperature: 37,
-    humid: 70,
-    brightness: 300,
-    time: "14/02/2003 12:12:12",
-  },
-  {
-    key: "3",
-    id: 3,
-    temperature: 37,
-    humid: 70,
-    brightness: 300,
-    time: "18/08/2003 12:12:12",
-  },
-  {
-    key: "4",
-    id: 4,
-    temperature: 37,
-    humid: 70,
-    brightness: 300,
-    time: "31/11/2003 12:12:12",
-  },
-  {
-    key: "5",
-    id: 5,
-    temperature: 37,
-    humid: 70,
-    brightness: 300,
-    time: "21/01/2003 12:12:12",
-  },
-  {
-    key: "6",
-    id: 6,
-    temperature: 37,
-    humid: 70,
-    brightness: 300,
-    time: "13/09/2003 12:12:12",
-  },
-  {
-    key: "7",
-    id: 7,
-    temperature: 37,
-    humid: 70,
-    brightness: 300,
-    time: "10/03/2003 12:12:12",
-  },
-  {
-    key: "8",
-    id: 8,
-    temperature: 37,
-    humid: 70,
-    brightness: 300,
-    time: "29/11/2003 12:12:12",
-  },
-  {
-    key: "9",
-    id: 9,
-    temperature: 37,
-    humid: 70,
-    brightness: 300,
-    time: "22/12/2003 12:12:12",
-  },
-  {
-    key: "10",
-    id: 10,
-    temperature: 37,
-    humid: 70,
-    brightness: 300,
-    time: "26/07/2003 12:12:12",
-  },
-  {
-    key: "11",
-    id: 11,
-    temperature: 37,
-    humid: 70,
-    brightness: 200,
-    time: "12/04/2003 12:12:12",
-  },
-  {
-    key: "12",
-    id: 12,
-    temperature: 37,
-    humid: 70,
-    brightness: 300,
-    time: "25/05/2003 12:12:12",
-  },
-];
-
-const onChange = (pagination, filters, sorter, extra) => {
-  console.log("params", pagination, filters, sorter, extra);
-};
 
 function DataSensor() {
   const [searchText, setSearchText] = useState("");
@@ -228,27 +124,25 @@ function DataSensor() {
   const columns = [
     {
       title: "ID",
-      dataIndex: "id",
-      sorter: (a, b) => a.id - b.id,
+      dataIndex: "_id",
+      //sorter: (a, b) => a.id - b.id,
+      sorter: (a, b) => a._id.localeCompare(b._id)
     },
     {
       title: "Temperature (°C)",
       dataIndex: "temperature",
-      render: (text) => <div style={{ color: "red" }}>{text}</div>,
       sorter: (a, b) => a.temperature - b.temperature,
       ...getColumnSearchProps("temperature"),
     },
     {
       title: "Humid (%RH)",
-      dataIndex: "humid",
-      //render: (text) => <div style={{ color: "blue" }}>{text}</div>,
+      dataIndex: "humidity",
       sorter: (a, b) => a.humid - b.humid,
       ...getColumnSearchProps("humid"),
     },
     {
       title: "Brightness (lx)",
       dataIndex: "brightness",
-      //render: (text) => <div style={{ color: "orange" }}>{text}</div>,
       sorter: (a, b) => a.brightness - b.brightness,
       ...getColumnSearchProps("brightness"),
     },
@@ -259,6 +153,38 @@ function DataSensor() {
       ...getColumnSearchProps("time"),
     },
   ];
+
+  const [data, setData] = useState([]);
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+
+  const onShowSizeChange = (current, pageSize) => {
+    console.log(current, pageSize);
+    setPageSize(pageSize);
+    
+  };
+
+  const onChange = (pagination, filters, sorter, extra) => {
+    console.log("params", pagination, filters, sorter, extra);
+    setPageSize(pagination.pageSize);
+    setPage(pagination.current);
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      const result = await getDataSensor(pageSize, page, searchText, searchedColumn);
+      setTotalCount(result.totalCount)
+      const formattedData = result.data.map(record => ({
+        ...record,
+        time: formatDate(record.time),
+      }));
+      setData(formattedData);
+      console.log(result)
+    }
+    getData();
+  }, [page, pageSize, searchText, searchedColumn])
+
   return (
     <>
       <h1>Data Sensor</h1>
@@ -270,15 +196,12 @@ function DataSensor() {
         }}
       >
         <Table
-          // pagination={{
-          //   position: ["topRight", "bottomCenter"],
-          // }}
           pagination={{
             position: ["topRight", "bottomCenter"],
             showSizeChanger: true,
             onShowSizeChange: onShowSizeChange,
             defaultCurrent: 1,
-            //total: 500
+            total: totalCount
           }}
           columns={columns}
           dataSource={data}

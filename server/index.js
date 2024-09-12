@@ -36,6 +36,38 @@ app.post('/data-sensor', async (req, res) => {
 });
 
 
+app.get('/data-sensor', async (req, res) => {
+  try {
+    const pageSize = parseInt(req.query.pageSize) || 10; // Số lượng bản ghi mỗi trang
+    const page = parseInt(req.query.page) || 1; // Trang hiện tại
+    const searchText = req.query.searchText || "";
+    const searchedColumn = req.query.searchedColumn || "";
+
+    // Tạo điều kiện tìm kiếm
+    const query = {};
+    if (searchText && searchedColumn) {
+      query[searchedColumn] = { $regex: searchText, $options: 'i' }; // Tìm kiếm không phân biệt chữ hoa chữ thường
+    }
+
+
+    const data = await DataSensors.find()
+      .skip((page - 1) * pageSize)
+      .limit(pageSize);
+
+    const totalCount = await DataSensors.countDocuments();
+
+    res.json({
+      data,
+      totalCount,
+      pageSize,
+      page,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 
 app.listen(3006, () => {
   console.log("server listening on port 3006");
