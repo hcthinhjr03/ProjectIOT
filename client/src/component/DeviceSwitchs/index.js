@@ -1,21 +1,18 @@
 import { ConfigProvider, Descriptions } from "antd";
 import { Switch } from "antd";
 import "./DeviceSwitchs.scss";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import mqtt from "mqtt";
+import { useDevices } from '../../context/DeviceContext';
+import { useMqtt } from '../../context/MqttContext';
 
 function DeviceSwitchs() {
   const [fanDotLottie, setFanDotLottie] = useState(null);
   const [lightDotLottie, setLightDotLottie] = useState(null);
   const [ACDotLottie, setACDotLottie] = useState(null);
 
-  const [isFanOn, setIsFanOn] = useState(false);
-  const [isLightOn, setIsLightOn] = useState(false);
-  const [isACOn, setIsACOn] = useState(false);
-
-  const [client, setClient] = useState(null);
-  const [connected, setConnected] = useState(false);
+  const { client, connected } = useMqtt();
+  const { isFanOn, toggleFan, isLightOn, toggleLight, isACOn, toggleAC } = useDevices();
 
   const fanDotLottieRefCallback = (dotLottie) => {
     setFanDotLottie(dotLottie);
@@ -34,7 +31,7 @@ function DeviceSwitchs() {
     if (client && connected) {
       client.publish("esp8266/action/fan", fanState);
     }
-    setIsFanOn(!isFanOn);
+    toggleFan();
     if(isFanOn){
       fanDotLottie.stop();
     }
@@ -48,7 +45,7 @@ function DeviceSwitchs() {
     if (client && connected) {
       client.publish("esp8266/action/bulb", bulbState);
     }
-    setIsLightOn(state);
+    toggleLight();
     if(isLightOn){
       lightDotLottie.stop();
     }
@@ -62,7 +59,7 @@ function DeviceSwitchs() {
     if (client && connected) {
       client.publish("esp8266/action/ac", acState);
     }
-    setIsACOn(!isACOn);
+    toggleAC();
     if(isACOn){
       ACDotLottie.stop();
     }
@@ -150,31 +147,6 @@ function DeviceSwitchs() {
     },
   ];
 
-  useEffect(() => {
-    const mqttClient = mqtt.connect('mqtt://192.168.1.6:9001');
-
-    mqttClient.on('connect', () => {
-      console.log('Connected to MQTT broker');
-      setConnected(true);
-    });
-
-    mqttClient.on('error', (err) => {
-      console.error('MQTT connection error: ', err);
-    });
-
-    mqttClient.on('close', () => {
-      console.log('Disconnected from MQTT broker');
-      setConnected(false);
-    });
-
-    setClient(mqttClient);
-
-    return () => {
-      if (mqttClient) {
-        mqttClient.end();
-      }
-    };
-  }, []);
 
   return (
     <>

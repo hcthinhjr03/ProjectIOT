@@ -1,57 +1,9 @@
 import { CChart } from "@coreui/react-chartjs";
-import mqtt from "mqtt";
-import { useCallback, useEffect, useState } from "react";
-
-
+import { useMqtt } from "../../context/MqttContext";
 
 function Chart() {
 
-  const [temperatureData, setTemperatureData] = useState([]);
-  const [humidityData, setHumidityData] = useState([]);
-  const [brightnessData, setBrightnessData] = useState([]);
-
-  const handleNewData = useCallback((newData) => {
-    const maxDataPoints = 10;
-
-    setTemperatureData(prevTemperatureData => {
-      const updatedTemperatureData = [...prevTemperatureData, newData.temperature];
-      return updatedTemperatureData.slice(-maxDataPoints);
-    });
-
-    setHumidityData(prevHumidityData => {
-      const updatedHumidityData = [...prevHumidityData, newData.humidity];
-      return updatedHumidityData.slice(-maxDataPoints);
-    });
-
-    setBrightnessData(prevBrightnessData => {
-      const updatedBrightnessData = [...prevBrightnessData, newData.brightness];
-      return updatedBrightnessData.slice(-maxDataPoints);
-    });
-  }, []);
-
-  useEffect(() => {
-    const client = mqtt.connect('mqtt://192.168.1.6:9001');
-
-    client.on('connect', () => {
-      console.log('Connected to MQTT broker');
-      client.subscribe('esp8266/datasensor');
-    });
-
-    client.on('message', (topic, message) => {
-      if (topic === 'esp8266/datasensor') {
-        const newData = JSON.parse(message.toString());
-        handleNewData(newData);
-      }
-    });
-
-    client.on('error', (error) => {
-      console.error('MQTT error:', error);
-    });
-
-    return () => {
-      client.end();
-    };
-  }, [handleNewData]);
+  const { temperatureData, humidityData, brightnessData } = useMqtt(); 
 
   return (
     <>
