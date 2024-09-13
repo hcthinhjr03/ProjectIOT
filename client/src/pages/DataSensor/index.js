@@ -12,12 +12,14 @@ function DataSensor() {
   const searchInput = useRef(null);
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
+    setSearchText(selectedKeys[0] || "");
+    setSearchedColumn(dataIndex || "");
   };
   const handleReset = (clearFilters) => {
     clearFilters();
-    setSearchText("");
+    // setSearchText("");
+    // setSearchedColumn("");
+    // setData([]);
   };
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -65,20 +67,7 @@ function DataSensor() {
               width: 90,
             }}
           >
-            Reset
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({
-                closeDropdown: false,
-              });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
+            Clear
           </Button>
           <Button
             type="link"
@@ -137,8 +126,8 @@ function DataSensor() {
     {
       title: "Humid (%RH)",
       dataIndex: "humidity",
-      sorter: (a, b) => a.humid - b.humid,
-      ...getColumnSearchProps("humid"),
+      sorter: (a, b) => a.humidity - b.humidity,
+      ...getColumnSearchProps("humidity"),
     },
     {
       title: "Brightness (lx)",
@@ -162,25 +151,27 @@ function DataSensor() {
   const onShowSizeChange = (current, pageSize) => {
     console.log(current, pageSize);
     setPageSize(pageSize);
-    
+    setPage(current);
   };
 
   const onChange = (pagination, filters, sorter, extra) => {
     console.log("params", pagination, filters, sorter, extra);
     setPageSize(pagination.pageSize);
     setPage(pagination.current);
+    
   };
 
   useEffect(() => {
     const getData = async () => {
       const result = await getDataSensor(pageSize, page, searchText, searchedColumn);
-      setTotalCount(result.totalCount)
-      const formattedData = result.data.map(record => ({
-        ...record,
-        time: formatDate(record.time),
-      }));
-      setData(formattedData);
-      console.log(result)
+        setTotalCount(result.totalCount);
+        if(result.data){
+          const formattedData = result.data.map(record => ({
+            ...record,
+            time: formatDate(record.time),
+          }));
+          setData(formattedData);
+        }
     }
     getData();
   }, [page, pageSize, searchText, searchedColumn])
