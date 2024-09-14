@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 const dbConnect = require("./db/dbConnect");
 const DataSensors = require("./db/dataSensorModel");
+const ActionHistory = require("./db/actionHistoryModel");
 
 //database connection
 dbConnect();
@@ -11,12 +12,12 @@ dbConnect();
 app.use(cors());
 app.use(express.json());
 
-//routes
-// app.use("/admin", AdminRouter);
 
 app.get("/", (req, res) => {
   res.send({ message: "Hello from IOT-Project API!" });
 });
+
+//data-sensor routes
 
 app.post("/data-sensor", async (req, res) => {
   const { temperature, humidity, brightness } = req.body;
@@ -89,6 +90,72 @@ app.get("/data-sensor", async (req, res) => {
       .limit(pageSize);
 
     const totalCount = await DataSensors.countDocuments(query);
+
+    res.json({
+      data,
+      totalCount,
+      pageSize,
+      page,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+//action-history routes
+app.post("/action-history", async (req, res) => {
+  const { device, action } = req.body;
+
+  try {
+    const newActionHistory = await ActionHistory.create({
+      device,
+      action
+    });
+    if (!newActionHistory) {
+      res.status(401).json({ message: "Error created action history" });
+    }
+    res.status(200).json({ message: "Action history created successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/action-history", async (req, res) => {
+  try {
+    const pageSize = parseInt(req.query.pageSize) || 10; // Số lượng bản ghi mỗi trang
+    const page = parseInt(req.query.page) || 1; // Trang hiện tại
+    const searchText = req.query.searchText || "";
+    const searchedColumn = req.query.searchedColumn || "";
+
+    // Tạo điều kiện tìm kiếm
+    const query = {};
+    if (searchText && searchedColumn) {
+      switch (searchedColumn) {
+        case "time":
+          const date = parseDateString(searchText);
+          if (date) {
+            // Tìm kiếm trong khoảng thời gian 1 ngày
+            const startOfDay = new Date(date);
+            startOfDay.setUTCHours(0, 0, 0, 0);
+            const endOfDay = new Date(date);
+            endOfDay.setUTCHours(23, 59, 59, 999);
+            query[searchedColumn] = {
+              $gte: startOfDay.toISOString(),
+              $lte: endOfDay.toISOString(),
+            };
+          }
+          break;
+        default:
+          query[searchedColumn] = { $regex: searchText, $options: "i" };
+      }
+    }
+
+    const data = await ActionHistory.find(query)
+      .skip((page - 1) * pageSize)
+      .limit(pageSize);
+
+    const totalCount = await ActionHistory.countDocuments(query);
 
     res.json({
       data,
