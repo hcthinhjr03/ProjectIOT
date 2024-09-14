@@ -1,102 +1,9 @@
 import { Button, ConfigProvider, Input, Space, Table, Tag } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
-
-const onShowSizeChange = (current, pageSize) => {
-  console.log(current, pageSize);
-};
-
-const data = [
-  {
-    key: "1",
-    device: "Fan",
-    id: 1,
-    action: "ON",
-    time: "26/07/2003 12:12:12",
-  },
-  {
-    key: "2",
-    device: "Light",
-    id: 2,
-    action: "OFF",
-    time: "26/07/2003 12:12:12",
-  },
-  {
-    key: "3",
-    device: "Air Conditioner",
-    id: 3,
-    action: "ON",
-    time: "26/07/2003 12:12:12",
-  },
-  {
-    key: "4",
-    device: "Fan",
-    id: 4,
-    action: "ON",
-    time: "26/07/2003 12:12:12",
-  },
-  {
-    key: "5",
-    device: "Light",
-    id: 5,
-    action: "OFF",
-    time: "11/07/2003 12:12:12",
-  },
-  {
-    key: "6",
-    device: "Air Conditioner",
-    id: 6,
-    action: "ON",
-    time: "26/07/2003 12:12:12",
-  },
-  {
-    key: "7",
-    device: "Fan",
-    id: 7,
-    action: "ON",
-    time: "14/07/2003 12:12:12",
-  },
-  {
-    key: "8",
-    device: "Light",
-    id: 8,
-    action: "OFF",
-    time: "26/07/2003 12:12:12",
-  },
-  {
-    key: "9",
-    device: "Air Conditioner",
-    id: 9,
-    action: "ON",
-    time: "26/07/2003 12:12:12",
-  },
-  {
-    key: "10",
-    device: "Fan",
-    id: 10,
-    action: "ON",
-    time: "14/07/2003 12:12:12",
-  },
-  {
-    key: "11",
-    device: "Light",
-    id: 11,
-    action: "OFF",
-    time: "11/07/2003 12:12:12",
-  },
-  {
-    key: "12",
-    device: "Air Conditioner",
-    id: 12,
-    action: "ON",
-    time: "26/07/2003 12:12:12",
-  },
-];
-
-const onChange = (pagination, filters, sorter, extra) => {
-  console.log("params", pagination, filters, sorter, extra);
-};
+import { getActionHistory } from "../../services/deviceServices";
+import { formatDate } from "../../helpers/formatDate";
 
 function ActionHistory() {
   const [searchText, setSearchText] = useState("");
@@ -104,12 +11,12 @@ function ActionHistory() {
   const searchInput = useRef(null);
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
+    setSearchText(selectedKeys[0] || "");
+    setSearchedColumn(dataIndex || "");
   };
   const handleReset = (clearFilters) => {
     clearFilters();
-    setSearchText("");
+    //setSearchText("");
   };
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -157,20 +64,7 @@ function ActionHistory() {
               width: 90,
             }}
           >
-            Reset
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({
-                closeDropdown: false,
-              });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
+            Clear
           </Button>
           <Button
             type="link"
@@ -216,9 +110,9 @@ function ActionHistory() {
   const columns = [
     {
       title: "ID",
-      dataIndex: "id",
+      dataIndex: "_id",
       //key: "id",
-      sorter: (a, b) => a.id - b.id,
+      sorter: (a, b) => a._id.localeCompare(b._id)
     },
     {
       title: "Device",
@@ -239,7 +133,7 @@ function ActionHistory() {
         },
       ],
       filterMode: "tree",
-      filterSearch: true,
+      filterSearch: false,
       onFilter: (value, record) => record.device.startsWith(value),
     },
     {
@@ -274,7 +168,7 @@ function ActionHistory() {
         },
       ],
       filterMode: "tree",
-      filterSearch: true,
+      filterSearch: false,
       onFilter: (value, record) => record.action.startsWith(value),
     },
     {
@@ -284,6 +178,39 @@ function ActionHistory() {
       ...getColumnSearchProps("time"),
     },
   ];
+
+  const [data, setData] = useState([]);
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+
+  const onShowSizeChange = (current, pageSize) => {
+    console.log(current, pageSize);
+    setPageSize(pageSize);
+    setPage(current);
+  };
+
+  const onChange = (pagination, filters, sorter, extra) => {
+    console.log("params", pagination, filters, sorter, extra);
+    setPageSize(pagination.pageSize);
+    setPage(pagination.current);
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      const result = await getActionHistory(pageSize, page, searchText, searchedColumn);
+        setTotalCount(result.totalCount);
+        if(result.data){
+          const formattedData = result.data.map(record => ({
+            ...record,
+            time: formatDate(record.time),
+          }));
+          setData(formattedData);
+        }
+    }
+    getData();
+  }, [page, pageSize, searchText, searchedColumn])
+
   return (
     <>
       <h1>Action History</h1>
@@ -300,7 +227,7 @@ function ActionHistory() {
             showSizeChanger: true,
             onShowSizeChange: onShowSizeChange,
             defaultCurrent: 1,
-            total: 500
+            total: totalCount
           }}
           columns={columns}
           dataSource={data}

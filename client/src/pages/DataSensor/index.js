@@ -17,9 +17,6 @@ function DataSensor() {
   };
   const handleReset = (clearFilters) => {
     clearFilters();
-    // setSearchText("");
-    // setSearchedColumn("");
-    // setData([]);
   };
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
