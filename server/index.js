@@ -51,6 +51,8 @@ app.get("/data-sensor", async (req, res) => {
     const page = parseInt(req.query.page) || 1; // Trang hiện tại
     const searchText = req.query.searchText || "";
     const searchedColumn = req.query.searchedColumn || "";
+    const sortField = req.query.sortField || ""; 
+    const sortOrder = req.query.sortOrder || ""; 
 
     // Tạo điều kiện tìm kiếm
     const query = {};
@@ -85,7 +87,13 @@ app.get("/data-sensor", async (req, res) => {
       }
     }
 
+    const sort = {};
+    if (sortField) {
+      sort[sortField] = sortOrder === "ascend" ? 1 : -1; 
+    }
+
     const data = await DataSensors.find(query)
+      .sort(sort)
       .skip((page - 1) * pageSize)
       .limit(pageSize);
 

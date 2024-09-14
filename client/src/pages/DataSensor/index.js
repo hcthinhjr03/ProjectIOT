@@ -112,7 +112,7 @@ function DataSensor() {
       title: "ID",
       dataIndex: "_id",
       //sorter: (a, b) => a.id - b.id,
-      sorter: (a, b) => a._id.localeCompare(b._id)
+      //sorter: (a, b) => a._id.localeCompare(b._id)
     },
     {
       title: "Temperature (°C)",
@@ -141,6 +141,8 @@ function DataSensor() {
   ];
 
   const [data, setData] = useState([]);
+  const [sortField, setSortField] = useState("");
+  const [sortOrder, setSortOrder] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -155,12 +157,18 @@ function DataSensor() {
     console.log("params", pagination, filters, sorter, extra);
     setPageSize(pagination.pageSize);
     setPage(pagination.current);
-    
+    if(sorter.order !== undefined){
+      setSortField(sorter.field)
+      setSortOrder(sorter.order);
+    } else {
+      setSortField("")
+      setSortOrder("");
+    }
   };
 
   useEffect(() => {
     const getData = async () => {
-      const result = await getDataSensor(pageSize, page, searchText, searchedColumn);
+      const result = await getDataSensor(pageSize, page, searchText, searchedColumn, sortField, sortOrder);
         setTotalCount(result.totalCount);
         if(result.data){
           const formattedData = result.data.map(record => ({
@@ -171,7 +179,7 @@ function DataSensor() {
         }
     }
     getData();
-  }, [page, pageSize, searchText, searchedColumn])
+  }, [page, pageSize, searchText, searchedColumn, sortField, sortOrder])
 
   return (
     <>

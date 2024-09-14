@@ -113,7 +113,7 @@ function Profile() {
               cover={
                 <img
                   alt="avt"
-                  src="https://scontent.fhan2-3.fna.fbcdn.net/v/t39.30808-6/326955186_3045248592274051_1515195335198338580_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeEMVIT5BrZGPw2iJ9kN1jiuPs7s_RdiiG4-zuz9F2KIbpIdR0zCbvuXIDpCuUZ6AGlbcsgygb8obny2_jZS5kuJ&_nc_ohc=x33tGD9u0oUQ7kNvgEi60bx&_nc_ht=scontent.fhan2-3.fna&oh=00_AYCN5L-ETvB3xegRGltpfb1i3cJVtFsMcM3fpv3oOzVOwA&oe=66D48633"
+                  src="https://scontent.fhan2-3.fna.fbcdn.net/v/t39.30808-6/326955186_3045248592274051_1515195335198338580_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeEMVIT5BrZGPw2iJ9kN1jiuPs7s_RdiiG4-zuz9F2KIbpIdR0zCbvuXIDpCuUZ6AGlbcsgygb8obny2_jZS5kuJ&_nc_ohc=1zb2La_-Vt0Q7kNvgG19XhS&_nc_ht=scontent.fhan2-3.fna&_nc_gid=A1vWkeRDfX9RnnlrJNGrvlz&oh=00_AYAU7VxA28AfXIct2irPGRsnpJbho-FhoHs458euyKHbVg&oe=66EB9873"
                 />
               }
             >

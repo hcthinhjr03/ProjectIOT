@@ -112,7 +112,7 @@ function ActionHistory() {
       title: "ID",
       dataIndex: "_id",
       //key: "id",
-      sorter: (a, b) => a._id.localeCompare(b._id)
+      //sorter: (a, b) => a._id.localeCompare(b._id)
     },
     {
       title: "Device",
