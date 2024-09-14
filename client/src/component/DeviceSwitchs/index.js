@@ -1,10 +1,11 @@
 import { ConfigProvider, Descriptions } from "antd";
 import { Switch } from "antd";
 import "./DeviceSwitchs.scss";
-import { useState } from "react";
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { useDevices } from '../../context/DeviceContext';
-import { useMqtt } from '../../context/MqttContext';
+import { useEffect, useState } from "react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { useDevices } from "../../context/DeviceContext";
+import { useMqtt } from "../../context/MqttContext";
+import { postActionHistory } from "../../services/deviceServices";
 
 function DeviceSwitchs() {
   const [fanDotLottie, setFanDotLottie] = useState(null);
@@ -13,6 +14,8 @@ function DeviceSwitchs() {
 
   const { client, connected } = useMqtt();
   const { isFanOn, toggleFan, isLightOn, toggleLight, isACOn, toggleAC } = useDevices();
+  const [device, setDevice] = useState("");
+  const [action, setAction] = useState("");
 
   const fanDotLottieRefCallback = (dotLottie) => {
     setFanDotLottie(dotLottie);
@@ -25,48 +28,51 @@ function DeviceSwitchs() {
   const ACDotLottieRefCallback = (dotLottie) => {
     setACDotLottie(dotLottie);
   };
-  
+
   const handleFanSwitch = (state) => {
+    setDevice("Fan");
+    setAction(state);
     let fanState = state ? "ON" : "OFF";
     if (client && connected) {
       client.publish("esp8266/action/fan", fanState);
     }
     toggleFan();
-    if(isFanOn){
+    if (isFanOn) {
       fanDotLottie.stop();
-    }
-    else {
+    } else {
       fanDotLottie.play();
     }
-  }
+  };
 
   const handleLightSwitch = (state) => {
+    setDevice("Light");
+    setAction(state);
     let bulbState = state ? "ON" : "OFF";
     if (client && connected) {
       client.publish("esp8266/action/bulb", bulbState);
     }
     toggleLight();
-    if(isLightOn){
+    if (isLightOn) {
       lightDotLottie.stop();
-    }
-    else {
+    } else {
       lightDotLottie.play();
     }
-  }
+  };
 
   const handleACSwitch = (state) => {
+    setDevice("Air Conditioner");
+    setAction(state);
     let acState = state ? "ON" : "OFF";
     if (client && connected) {
       client.publish("esp8266/action/ac", acState);
     }
     toggleAC();
-    if(isACOn){
+    if (isACOn) {
       ACDotLottie.stop();
-    }
-    else {
+    } else {
       ACDotLottie.play();
     }
-  }
+  };
 
   const items = [
     {
@@ -89,7 +95,10 @@ function DeviceSwitchs() {
             },
           }}
         >
-          <Switch checked={isLightOn} onChange={() => handleLightSwitch(!isLightOn)}/>
+          <Switch
+            checked={isLightOn}
+            onChange={() => handleLightSwitch(!isLightOn)}
+          />
         </ConfigProvider>
       ),
       span: 3,
@@ -111,11 +120,13 @@ function DeviceSwitchs() {
           theme={{
             token: {
               colorPrimary: "#FF7F50",
-
             },
           }}
         >
-          <Switch checked={isFanOn} onChange={() => handleFanSwitch(!isFanOn)}/>
+          <Switch
+            checked={isFanOn}
+            onChange={() => handleFanSwitch(!isFanOn)}
+          />
         </ConfigProvider>
       ),
       span: 3,
@@ -140,35 +151,48 @@ function DeviceSwitchs() {
             },
           }}
         >
-          <Switch checked={isACOn} onChange={() => handleACSwitch(!isACOn)}/>
+          <Switch checked={isACOn} onChange={() => handleACSwitch(!isACOn)} />
         </ConfigProvider>
       ),
       span: 3,
     },
   ];
 
+  useEffect(() => {
+    if (device !== "" && action !== "") {
+      const actionHistoryData = {
+        device: device,
+        action: action ? "ON" : "OFF",
+      };
+
+      const postData = async () => {
+        const result = await postActionHistory(actionHistoryData);
+        if (result) {
+          console.log(result);
+        }
+      };
+
+      postData();
+      console.log(actionHistoryData);
+    }
+  }, [device, action]);
 
   return (
     <>
-      <div style={{ padding: "0px 80px 0px 0px", marginBottom: "20px"}}>
+      <div style={{ padding: "0px 80px 0px 0px", marginBottom: "20px" }}>
         <ConfigProvider
           theme={{
             token: {
-              colorSplit: "#f7e9e3"
+              colorSplit: "#f7e9e3",
             },
             components: {
               Descriptions: {
-                labelBg: "#f7e9e3"
-              }
-            }
+                labelBg: "#f7e9e3",
+              },
+            },
           }}
         >
-
-
-          <Descriptions
-            bordered
-            items={items}
-          />
+          <Descriptions bordered items={items} />
         </ConfigProvider>
       </div>
     </>

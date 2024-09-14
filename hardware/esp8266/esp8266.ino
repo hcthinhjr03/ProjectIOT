@@ -98,13 +98,6 @@ void onMqttPublish(uint16_t packetId) {
   Serial.println(packetId);
 }
 
-// void onMqttSubscribe(uint16_t packetId, uint8_t qos) {
-//   Serial.println("Subscribe acknowledged.");
-//   Serial.print("  packetId: ");
-//   Serial.println(packetId);
-//   Serial.print("  qos: ");
-//   Serial.println(qos);
-// }
 
 void setup() {
   Serial.begin(115200);
@@ -125,7 +118,7 @@ void setup() {
   mqttClient.onPublish(onMqttPublish);
   mqttClient.setServer(MQTT_HOST, MQTT_PORT);
 
-   mqttClient.onMessage([](char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t length, size_t totalLength, size_t offset) {
+  mqttClient.onMessage([](char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t length, size_t totalLength, size_t offset) {
     String topicStr(topic);
     String message(payload);
 
@@ -173,10 +166,6 @@ void loop() {
 
     LDR_value = analogRead(ldr_pin);
     brightness = conversion(LDR_value);
-
-    // digitalWrite(LED_BULB, HIGH);
-    // digitalWrite(LED_FAN, HIGH);
-    // digitalWrite(LED_AC, HIGH);
 
     if (isnan(temperature) || isnan(humidity)) {
       Serial.println(F("Failed to read from DHT sensor!"));
