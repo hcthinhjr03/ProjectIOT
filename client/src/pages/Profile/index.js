@@ -3,7 +3,7 @@ import { ConfigProvider, Descriptions } from "antd";
 import { Card } from "antd";
 import { Col, Row } from "antd";
 import { FaBook } from "react-icons/fa";
-import {  BsWrenchAdjustable, BsTerminalFill } from "react-icons/bs";
+import { BsWrenchAdjustable, BsTerminalFill } from "react-icons/bs";
 import { AiFillFile } from "react-icons/ai";
 import { Tabs } from "antd";
 import Education from "../../component/Education";
@@ -50,26 +50,26 @@ const tabItems = [
   {
     key: 1,
     label: "This Project",
-    children: <Details/>,
+    children: <Details />,
     icon: <AiFillFile />,
   },
   {
     key: 2,
     label: "Education",
-    children: <Education/>,
+    children: <Education />,
     icon: <FaBook />,
   },
   {
     key: 3,
     label: "Skills",
-    children: <Skills/>,
-    icon: <BsWrenchAdjustable  />,
+    children: <Skills />,
+    icon: <BsWrenchAdjustable />,
   },
   {
     key: 4,
     label: "Projects",
-    children: <Projects/>,
-    icon: <BsTerminalFill  />,
+    children: <Projects />,
+    icon: <BsTerminalFill />,
   },
 ];
 
@@ -88,7 +88,7 @@ function Profile() {
               inkBarColor: "#FF7F50",
               itemHoverColor: "#FF7F50",
               itemActiveColor: "#FF7F50",
-            }
+            },
           },
           token: {
             fontSize: 16,
@@ -98,11 +98,8 @@ function Profile() {
         <Row>
           <Col span={18} push={6}>
             <Descriptions title="My Profile" layout="vertical" items={items} />
-            <br/>
-            <Tabs
-              defaultActiveKey="3"
-              items={tabItems}
-            />
+            <br />
+            <Tabs defaultActiveKey="3" items={tabItems} />
           </Col>
           <Col span={6} pull={18}>
             <Card
@@ -119,7 +116,15 @@ function Profile() {
             >
               <Meta
                 title="Ha Cuong Thinh"
-                description={<><>ID: B21DCCN691</><br/><>Class: D21CNPM04</><br/><>Posts and Telecommunications Institute of Technology</></>}
+                description={
+                  <>
+                    <>ID: B21DCCN691</>
+                    <br />
+                    <>Class: D21CNPM04</>
+                    <br />
+                    <>Posts and Telecommunications Institute of Technology</>
+                  </>
+                }
               />
             </Card>
           </Col>

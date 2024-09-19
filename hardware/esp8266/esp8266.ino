@@ -16,7 +16,7 @@
 
 //Mosquitto MQTT Broker
 #define MQTT_HOST IPAddress(192, 168, 1, 6)
-#define MQTT_PORT 1883
+#define MQTT_PORT 1893
 
 //MQTT Topics
 #define MQTT_PUB_DATA_SENSOR "esp8266/datasensor"

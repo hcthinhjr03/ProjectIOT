@@ -7,7 +7,7 @@ const { Header, Sider, Content } = Layout;
 const headerStyle = {
   textAlign: "center",
   color: "#fff",
-  height: 200,
+  height: 270,
   paddingInline: 48,
   lineHeight: "64px",
   backgroundColor: "#f7e9e3",
@@ -15,13 +15,13 @@ const headerStyle = {
 const contentStyle = {
   textAlign: "center",
   minHeight: 500,
-  lineHeight: "120px",
+  lineHeight: "20px",
   color: "#fff",
   backgroundColor: "#f7e9e3",
 };
 const siderStyle = {
   textAlign: "center",
-  lineHeight: "120px",
+  lineHeight: "20px",
   color: "#fff",
   backgroundColor: "#f7e9e3",
 };
@@ -60,14 +60,14 @@ function Dashboard() {
           </Header>
           <Layout>
             <Content style={contentStyle}>
-              <h3 style={{ margin: "0", color: "#FF7F50", lineHeight: "30px" }}>Chart</h3>
+              <h3 style={{ margin: "0", color: "#FF7F50"}}>Chart</h3>
               <div style={{paddingLeft: "50px", marginTop: "60px"}}>
                 <Chart/>
               </div>
               
             </Content>
             <Sider width="40%" style={siderStyle}>
-              <h3 style={{ margin: "0", color: "#FF7F50", lineHeight: "30px"}}>Switch</h3>
+              <h3 style={{ margin: "0", color: "#FF7F50"}}>Switch</h3>
               <DeviceSwitchs/>
             </Sider>
           </Layout>
