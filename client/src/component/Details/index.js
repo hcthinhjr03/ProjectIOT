@@ -6,7 +6,7 @@ const data = [
     title: "Project Report PDF",
     avatar: "https://png.pngtree.com/png-vector/20220606/ourmid/pngtree-pdf-file-icon-png-png-image_4899509.png",
     description: "Click title to view!",
-    href: "https://github.com/hcthinhjr03/ProjectIOT"
+    href: "https://drive.google.com/file/d/1wdatISnRqM0QZt2JG5C38vHbv4L-JBYa/view"
   },
   {
     title: "Project Github",
