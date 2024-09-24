@@ -87,7 +87,7 @@ app.get("/data-sensor", async (req, res) => {
       }
     }
 
-    const sort = {};
+    const sort = {time: -1};
     if (sortField) {
       sort[sortField] = sortOrder === "ascend" ? 1 : -1; 
     }
@@ -95,7 +95,7 @@ app.get("/data-sensor", async (req, res) => {
     const data = await DataSensors.find(query)
       .sort(sort)
       .skip((page - 1) * pageSize)
-      .limit(pageSize);
+      .limit(pageSize);  
 
     const totalCount = await DataSensors.countDocuments(query);
 
@@ -159,7 +159,10 @@ app.get("/action-history", async (req, res) => {
       }
     }
 
+    const sort = {time: -1};
+
     const data = await ActionHistory.find(query)
+      .sort(sort)
       .skip((page - 1) * pageSize)
       .limit(pageSize);
 

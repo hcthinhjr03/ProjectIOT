@@ -117,29 +117,13 @@ function ActionHistory() {
     {
       title: "Device",
       dataIndex: "device",
-      //key: "device",
-      filters: [
-        {
-          text: "Fan",
-          value: "Fan",
-        },
-        {
-          text: "Light",
-          value: "Light",
-        },
-        {
-          text: "Air Conditioner",
-          value: "Air Conditioner",
-        },
-      ],
-      filterMode: "tree",
-      filterSearch: false,
-      onFilter: (value, record) => record.device.startsWith(value),
+      ...getColumnSearchProps("device")
     },
     {
       title: "Action",
       key: "action",
       dataIndex: "action",
+      ...getColumnSearchProps("action"),
       render: (text) => (
         <>
           {text === "ON" ? (
@@ -157,19 +141,6 @@ function ActionHistory() {
           )}
         </>
       ),
-      filters: [
-        {
-          text: "ON",
-          value: "ON",
-        },
-        {
-          text: "OFF",
-          value: "OFF",
-        },
-      ],
-      filterMode: "tree",
-      filterSearch: false,
-      onFilter: (value, record) => record.action.startsWith(value),
     },
     {
       title: "Time",
