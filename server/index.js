@@ -38,12 +38,14 @@ app.post("/data-sensor", async (req, res) => {
   }
 });
 
-function parseDateString(dateString) {
-  const [day, month, year] = dateString.split('/').map(Number);
-  // Tạo đối tượng Date từ các thành phần
-  const date = new Date(year, month - 1, day + 1);
-  return date.toISOString(); // Chuyển đổi thành ISO 8601
-}
+
+const reverseFormatDate = (dateString) => {
+  const [day, month, year] = dateString.split('/');
+
+  const isoDate = new Date(`${year}-${month}-${day}`);
+
+  return isoDate.toISOString();
+};
 
 app.get("/data-sensor", async (req, res) => {
   try {
@@ -68,16 +70,19 @@ app.get("/data-sensor", async (req, res) => {
           }
           break;
         case "time":
-          const date = parseDateString(searchText);
+          const date = reverseFormatDate(searchText);
           if (date) {
             // Tìm kiếm trong khoảng thời gian 1 ngày
             const startOfDay = new Date(date);
             startOfDay.setUTCHours(0, 0, 0, 0);
+            startOfDay.setTime(startOfDay.getTime() - 7 * 60 * 60 * 1000);
             const endOfDay = new Date(date);
             endOfDay.setUTCHours(23, 59, 59, 999);
+            endOfDay.setTime(endOfDay.getTime() - 7 * 60 * 60 * 1000);
+
             query[searchedColumn] = {
-              $gte: startOfDay.toISOString(),
-              $lte: endOfDay.toISOString(),
+              $gte: startOfDay,
+              $lte: endOfDay,
             };
           }
           break;
@@ -87,10 +92,12 @@ app.get("/data-sensor", async (req, res) => {
       }
     }
 
-    const sort = {time: -1};
+    const sort = {};
     if (sortField) {
       sort[sortField] = sortOrder === "ascend" ? 1 : -1; 
     }
+
+    sort.time = -1;
 
     const data = await DataSensors.find(query)
       .sort(sort)
@@ -141,16 +148,18 @@ app.get("/action-history", async (req, res) => {
     if (searchText && searchedColumn) {
       switch (searchedColumn) {
         case "time":
-          const date = parseDateString(searchText);
+          const date = reverseFormatDate(searchText);
           if (date) {
             // Tìm kiếm trong khoảng thời gian 1 ngày
             const startOfDay = new Date(date);
             startOfDay.setUTCHours(0, 0, 0, 0);
+            startOfDay.setTime(startOfDay.getTime() - 7 * 60 * 60 * 1000);
             const endOfDay = new Date(date);
             endOfDay.setUTCHours(23, 59, 59, 999);
+            endOfDay.setTime(endOfDay.getTime() - 7 * 60 * 60 * 1000);
             query[searchedColumn] = {
-              $gte: startOfDay.toISOString(),
-              $lte: endOfDay.toISOString(),
+              $gte: startOfDay,
+              $lte: endOfDay
             };
           }
           break;

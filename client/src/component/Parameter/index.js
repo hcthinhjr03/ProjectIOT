@@ -34,7 +34,7 @@ function Parameter(){
               <Col span={8}>
                 <Card bordered={false}>
                   <p style={{margin: 0, marginBottom: "10px", marginTop: "-10px"}}>Temperature</p>
-                  <Progress type="dashboard" percent={dataSensor.temperature/50*100}  strokeColor={temperatureColors} strokeWidth={12} size={90} format={ (percent) =>  percent/100*50 + "°C"}/>
+                  <Progress type="dashboard" percent={dataSensor.temperature/50*100}  strokeColor={temperatureColors} strokeWidth={12} size={90} format={ (percent) =>  Math.round(percent/100*50) + "°C"}/>
                 </Card>
               </Col>
               <Col span={8}>
@@ -46,7 +46,7 @@ function Parameter(){
               <Col span={8}>
                 <Card bordered={false}>
                   <p style={{margin: 0, marginBottom: "10px", marginTop: "-10px"}}>Brightness</p>
-                  <Progress type="dashboard" percent={dataSensor.brightness/400*100}  strokeColor={brightnessColors} strokeWidth={12} size={90} format={ (percent) =>  percent/100*400 + "lux"}/>
+                  <Progress type="dashboard" percent={dataSensor.brightness/400*100}  strokeColor={brightnessColors} strokeWidth={12} size={90} format={ (percent) =>  Math.round(percent/100*400) + "lux"}/>
                 </Card>
               </Col>
             </Row>
